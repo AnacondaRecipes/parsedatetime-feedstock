@@ -1,29 +1,24 @@
 {% set name = "parsedatetime" %}
 {% set version = "2.6" %}
-{% set bundle = "tar.gz" %}
-{% set hash_type = "sha256" %}
-{% set hash = "4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455" %}
-{% set build = 0 %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.{{ bundle }}
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ bundle }}
-  {{ hash_type }}: {{ hash }}
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455
 
 build:
-  number: {{ build }}
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
     - python
+    - pip
     - setuptools
-    - pytest-runner
-
+    - wheel
   run:
     - python
 
@@ -31,13 +26,19 @@ test:
   imports:
     - parsedatetime
     - parsedatetime.pdt_locales
+  requires: 
+    - pip
+  commands: 
+    - pip check
 
 about:
   home: https://github.com/bear/parsedatetime
   license_file: LICENSE.txt
-  license: Apache 2.0
+  license: Apache-2.0
   license_family: Apache
-  summary: 'Parse human-readable date/time text.'
+  summary: Parse human-readable date/time text
+  description: |
+    Parse human-readable date/time strings.
   dev_url: https://github.com/bear/parsedatetime
   doc_url: https://bear.im/code/parsedatetime/docs/index.html
 
